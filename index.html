@@ -11,7 +11,7 @@
     <style>
       body {
         margin: 0;
-        background-color: #000; /* clean black background */
+        background-color: #000;
         font-family: 'Inter', sans-serif;
         display: flex;
         justify-content: center;
@@ -27,7 +27,7 @@
       }
       .button {
         display: block;
-        width: 280px;
+        width: 300px;
         padding: 20px;
         margin: 15px auto;
         font-size: 26px;
@@ -39,6 +39,7 @@
         border-radius: 14px;
         text-decoration: none;
         transition: all 0.3s ease;
+        cursor: pointer;
       }
       .button span {
         display: block;
@@ -55,6 +56,12 @@
       .container {
         text-align: center;
       }
+      .copy-text {
+        font-size: 18px;
+        color: #aaa;
+        margin-top: 6px;
+        word-break: break-all;
+      }
     </style>
   </head>
   <body>
@@ -64,18 +71,37 @@
       function Payments() {
         const links = [
           { name: "CashApp", price: "$4.99", href: "https://cash.app/$Jaydoem2" },
-          { name: "Litecoin (LTC)", price: "$4.99", href: "litecoin:ltc1qcptesryl4a2d699zrymjnr3gwpgkc872pjljzj" },
+          { 
+            name: "Litecoin (LTC)", 
+            price: "$4.99", 
+            href: "litecoin:ltc1qcptesryl4a2d699zrymjnr3gwpgkc872pjljzj", 
+            copy: "ltc1qcptesryl4a2d699zrymjnr3gwpgkc872pjljzj" 
+          },
           { name: "Robux", price: "1000", href: "https://www.roblox.com/catalog/129518350436856/NHKEY" },
         ];
+
+        const copyToClipboard = (text) => {
+          navigator.clipboard.writeText(text);
+          alert("Copied LTC address to clipboard!");
+        }
 
         return (
           <div className="container">
             <h1>💰 Payments</h1>
             {links.map((link) => (
-              <a key={link.name} href={link.href} target="_blank" rel="noopener noreferrer" className="button">
-                {link.name}
-                <span>{link.price}</span>
-              </a>
+              <div key={link.name}>
+                <a 
+                  href={link.href} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="button"
+                  onClick={() => link.copy ? copyToClipboard(link.copy) : null}
+                >
+                  {link.name}
+                  <span>{link.price}</span>
+                  {link.copy && <div className="copy-text">Click to copy LTC address</div>}
+                </a>
+              </div>
             ))}
           </div>
         );
