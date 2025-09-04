@@ -7,9 +7,53 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
     <style>
       body {
         margin: 0;
+        background-color: #000; /* clean black background */
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      h1 {
+        font-size: 50px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 50px;
+        text-align: center;
+      }
+      .button {
+        display: block;
+        width: 280px;
+        padding: 20px;
+        margin: 15px auto;
+        font-size: 26px;
+        font-weight: 600;
+        text-align: center;
+        color: white;
+        background-color: #111;
+        border: 2px solid #444;
+        border-radius: 14px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+      .button span {
+        display: block;
+        font-size: 18px;
+        font-weight: 400;
+        color: #aaa;
+        margin-top: 6px;
+      }
+      .button:hover {
+        background-color: #222;
+        border-color: #666;
+        transform: scale(1.05);
+      }
+      .container {
+        text-align: center;
       }
     </style>
   </head>
@@ -19,73 +63,21 @@
     <script type="text/babel">
       function Payments() {
         const links = [
-          { name: "CashApp", href: "https://cash.app/$Jaydoem2" },
-          { name: "Litecoin (LTC)", href: "litecoin:YourLTCAddress" },
-          { name: "Robux", href: "https://www.roblox.com/catalog/129518350436856/NHKEY" },
+          { name: "CashApp", price: "$4.99", href: "https://cash.app/$Jaydoem2" },
+          { name: "Litecoin (LTC)", price: "$4.99", href: "litecoin:ltc1qcptesryl4a2d699zrymjnr3gwpgkc872pjljzj" },
+          { name: "Robux", price: "1000", href: "https://www.roblox.com/catalog/129518350436856/NHKEY" },
         ];
 
         return (
-          <main
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              minHeight: "100vh",
-              backgroundImage:
-                "url('https://media0.giphy.com/media/3o6ozrlMozBKeijAvC/giphy.gif')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              overflow: "hidden",
-              padding: "20px",
-            }}
-          >
-            <h1
-              style={{
-                fontSize: "48px",
-                fontWeight: "bold",
-                marginBottom: "40px",
-                color: "white",
-                textShadow: "2px 2px #000",
-              }}
-            >
-              💰 Payments
-            </h1>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-              {links.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "block",
-                    textAlign: "center",
-                    padding: "20px",
-                    fontSize: "28px",
-                    fontWeight: "bold",
-                    color: "white",
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    borderRadius: "15px",
-                    transition: "all 0.3s ease",
-                    textDecoration: "none",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.7)";
-                    e.currentTarget.style.transform = "scale(1.1)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.5)";
-                    e.currentTarget.style.transform = "scale(1)";
-                  }}
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-          </main>
+          <div className="container">
+            <h1>💰 Payments</h1>
+            {links.map((link) => (
+              <a key={link.name} href={link.href} target="_blank" rel="noopener noreferrer" className="button">
+                {link.name}
+                <span>{link.price}</span>
+              </a>
+            ))}
+          </div>
         );
       }
 
