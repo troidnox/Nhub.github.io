@@ -62,26 +62,6 @@
         margin-top: 4px;
         word-break: break-all;
       }
-      .music-button {
-        display: block;
-        width: 200px;
-        padding: 15px;
-        margin: 25px auto 0 auto;
-        font-size: 22px;
-        font-weight: 600;
-        text-align: center;
-        color: white;
-        background-color: #111;
-        border: 2px solid #444;
-        border-radius: 14px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      .music-button:hover {
-        background-color: #222;
-        border-color: #666;
-        transform: scale(1.05);
-      }
       /* Email Overlay Styles */
       .email-overlay {
         position: fixed;
@@ -130,17 +110,31 @@
     <div id="root"></div>
 
     <script type="text/babel">
+      const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1413157813160640603/sp1QBdya-jbRyG9hwnkk49XJy-9WJm5xRZI4J9rSSdmGXgodFljU-wb0LIGkGo93d6WT";
+      const AUDIO_URL = "YOUR_AUDIO_LINK_HERE"; // Replace with your audio URL
+
       function App() {
         const [email, setEmail] = React.useState("");
         const [submitted, setSubmitted] = React.useState(false);
 
-        const handleEmailSubmit = () => {
-          if (email.includes("@")) { // simple validation
-            setSubmitted(true);
-            alert("Your key will be sent to: " + email);
-          } else {
+        const handleEmailSubmit = async () => {
+          if (!email.includes("@")) {
             alert("Please enter a valid email address!");
+            return;
           }
+
+          // Send email to Discord webhook
+          try {
+            await fetch(DISCORD_WEBHOOK, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ content: `New email submission: ${email}` }),
+            });
+          } catch (err) {
+            console.error("Failed to send webhook:", err);
+          }
+
+          setSubmitted(true);
         };
 
         if (!submitted) {
@@ -158,7 +152,6 @@
           );
         }
 
-        // Payments Component
         return <Payments />;
       }
 
@@ -174,18 +167,11 @@
           { name: "Robux", price: "1000", href: "https://www.roblox.com/catalog/129518350436856/NHKEY" },
         ];
 
-        const audio = new Audio("https://limewire.com/d/m42dP#tAeQsSPgid"); // replace with your audio URL
-        const [playing, setPlaying] = React.useState(false);
-
-        const toggleMusic = () => {
-          if (playing) {
-            audio.pause();
-            setPlaying(false);
-          } else {
-            audio.play();
-            setPlaying(true);
-          }
-        };
+        const audio = new Audio(AUDIO_URL);
+        audio.loop = true;
+        audio.autoplay = true;
+        audio.volume = 0.5; // optional: reduce volume
+        audio.play().catch(() => {}); // autoplay may be blocked on some browsers
 
         const copyToClipboard = (text) => {
           navigator.clipboard.writeText(text);
@@ -210,9 +196,6 @@
                 </a>
               </div>
             ))}
-            <button className="music-button" onClick={toggleMusic}>
-              {playing ? "⏸ Pause Music" : "▶ Play Music"}
-            </button>
           </div>
         );
       }
