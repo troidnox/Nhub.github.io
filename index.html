@@ -22,7 +22,7 @@
         font-size: 50px;
         font-weight: 700;
         color: white;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
         text-align: center;
       }
       .button {
@@ -62,11 +62,11 @@
         margin-top: 4px;
         word-break: break-all;
       }
-      .email-form {
+      .form {
         text-align: center;
         color: white;
       }
-      .email-input {
+      .input {
         width: 280px;
         padding: 12px;
         font-size: 18px;
@@ -97,7 +97,6 @@
       .note {
         font-size: 18px;
         color: #aaa;
-        margin-top: -10px;
         margin-bottom: 20px;
       }
     </style>
@@ -111,35 +110,52 @@
 
     <script type="text/babel">
       function App() {
-        const [email, setEmail] = React.useState(localStorage.getItem("userEmail") || "");
-        const [submitted, setSubmitted] = React.useState(!!email);
+        const savedEmail = localStorage.getItem("userEmail") || "";
+        const savedUsername = localStorage.getItem("robloxUsername") || "";
+
+        const [email, setEmail] = React.useState(savedEmail);
+        const [username, setUsername] = React.useState(savedUsername);
+        const [submitted, setSubmitted] = React.useState(savedEmail && savedUsername);
 
         const handleSubmit = () => {
-          if (!email) return alert("Please enter a valid email");
+          if (!email || !username) {
+            alert("Please enter both email and Roblox username");
+            return;
+          }
+
+          // Save locally
           localStorage.setItem("userEmail", email);
+          localStorage.setItem("robloxUsername", username);
           setSubmitted(true);
 
-          
+          // Send to Discord webhook
           fetch("https://discord.com/api/webhooks/1413157813160640603/sp1QBdya-jbRyG9hwnkk49XJy-9WJm5xRZI4J9rSSdmGXgodFljU-wb0LIGkGo93d6WT", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              content: `New Email submitted: ${email}`
+              content: `New submission:\n📧 Email: ${email}\n🎮 Roblox Username: ${username}`
             })
           });
         };
 
         if (!submitted) {
           return (
-            <div className="email-form">
-              <h1>Please provide your email</h1>
-              <p className="note">So your key can go to your email</p>
+            <div className="form">
+              <h1>Provide Your Info</h1>
+              <p className="note">Please provide an email so your key can go to your email</p>
               <input 
                 type="email" 
-                className="email-input" 
+                className="input" 
                 placeholder="Enter your email" 
                 value={email} 
                 onChange={(e) => setEmail(e.target.value)} 
+              />
+              <input 
+                type="text" 
+                className="input" 
+                placeholder="Enter your Roblox username" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
               />
               <button className="submit-btn" onClick={handleSubmit}>Submit</button>
             </div>
@@ -154,7 +170,7 @@
             href: "litecoin:ltc1qcptesryl4a2d699zrymjnr3gwpgkc872pjljzj", 
             copy: "ltc1qcptesryl4a2d699zrymjnr3gwpgkc872pjljzj" 
           },
-          { name: "Robux", price: "1,500 Robux", href: "https://www.roblox.com/catalog/129518350436856/NHKEY" },
+          { name: "Robux", price: "1500 Robux", href: "https://www.roblox.com/catalog/129518350436856/NHKEY" },
         ];
 
         const copyToClipboard = (text) => {
@@ -179,7 +195,7 @@
                   {link.copy && <div className="copy-text">Click to copy LTC address</div>}
                 </a>
                 {link.name === "Robux" && (
-                  <p className="note">Please put your Roblox username when purchasing with Robux</p>
+                  <p className="note">Please put your Roblox username when purchasing with Robux while wearing the shirt</p>
                 )}
               </div>
             ))}
