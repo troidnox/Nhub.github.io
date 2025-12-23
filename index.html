@@ -4,206 +4,172 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Payments</title>
+
+    <!-- React -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
+
     <style>
       body {
         margin: 0;
-        background-color: #000;
+        background: radial-gradient(circle at top, #111 0%, #000 60%);
         font-family: 'Inter', sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
+        color: white;
       }
+
       h1 {
-        font-size: 50px;
+        font-size: 48px;
         font-weight: 700;
-        color: white;
-        margin-bottom: 30px;
-        text-align: center;
+        margin-bottom: 10px;
       }
-      .button {
-        display: block;
-        width: 300px;
-        padding: 20px;
-        margin: 15px auto;
-        font-size: 26px;
-        font-weight: 600;
-        text-align: center;
-        color: white;
-        background-color: #111;
-        border: 2px solid #444;
-        border-radius: 14px;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        cursor: pointer;
-      }
-      .button span {
-        display: block;
+
+      .subtitle {
         font-size: 18px;
-        font-weight: 400;
         color: #aaa;
-        margin-top: 6px;
+        margin-bottom: 30px;
       }
-      .button:hover {
-        background-color: #222;
-        border-color: #666;
-        transform: scale(1.05);
-      }
+
       .container {
         text-align: center;
+        max-width: 380px;
+        width: 100%;
       }
-      .copy-text {
-        font-size: 16px;
-        color: #aaa;
-        margin-top: 4px;
-        word-break: break-all;
+
+      .card {
+        background: #0b0b0b;
+        border: 1px solid #333;
+        border-radius: 18px;
+        padding: 22px;
+        margin-bottom: 18px;
+        transition: all 0.25s ease;
       }
-      .form {
-        text-align: center;
-        color: white;
+
+      .card:hover {
+        border-color: #666;
+        transform: translateY(-4px);
       }
-      .input {
-        width: 280px;
-        padding: 12px;
+
+      .method {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      .price {
         font-size: 18px;
-        border-radius: 10px;
-        border: 1px solid #444;
-        margin-bottom: 15px;
-        text-align: center;
+        color: #bbb;
+        margin-bottom: 14px;
       }
-      .submit-btn {
+
+      .btn {
         display: block;
-        width: 300px;
+        width: 100%;
         padding: 14px;
-        margin: 0 auto;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 600;
         color: white;
-        background-color: #111;
-        border: 2px solid #444;
-        border-radius: 14px;
+        background: #111;
+        border: 1px solid #444;
+        border-radius: 12px;
+        text-decoration: none;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.25s ease;
       }
-      .submit-btn:hover {
-        background-color: #222;
-        border-color: #666;
-        transform: scale(1.05);
+
+      .btn:hover {
+        background: #1a1a1a;
+        border-color: #777;
       }
+
+      .copy-text {
+        font-size: 14px;
+        color: #888;
+        margin-top: 10px;
+        word-break: break-all;
+      }
+
       .note {
-        font-size: 18px;
-        color: #aaa;
-        margin-bottom: 20px;
+        font-size: 14px;
+        color: #777;
+        margin-top: 8px;
       }
     </style>
   </head>
+
   <body>
+    <!-- Optional background music -->
+    <!--
     <audio autoplay loop>
       <source src="YOUR_AUDIO_LINK_HERE" type="audio/mpeg">
     </audio>
+    -->
 
     <div id="root"></div>
 
     <script type="text/babel">
       function App() {
-        const savedEmail = localStorage.getItem("userEmail") || "";
-        const savedUsername = localStorage.getItem("robloxUsername") || "";
+        const LTC_ADDRESS = "ltc1qdarlmf327ypv4krq3nrl3prpfehmkz7tzsnxvp";
 
-        const [email, setEmail] = React.useState(savedEmail);
-        const [username, setUsername] = React.useState(savedUsername);
-        const [submitted, setSubmitted] = React.useState(savedEmail && savedUsername);
-
-        const handleSubmit = () => {
-          if (!email || !username) {
-            alert("Please enter both email and Roblox username");
-            return;
-          }
-
-          // Save locally
-          localStorage.setItem("userEmail", email);
-          localStorage.setItem("robloxUsername", username);
-          setSubmitted(true);
-
-          // Send to Discord webhook
-          fetch("https://discord.com/api/webhooks/1413157813160640603/sp1QBdya-jbRyG9hwnkk49XJy-9WJm5xRZI4J9rSSdmGXgodFljU-wb0LIGkGo93d6WT", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              content: `New submission:\n📧 Email: ${email}\n🎮 Roblox Username: ${username}`
-            })
-          });
-        };
-
-        if (!submitted) {
-          return (
-            <div className="form">
-              <h1>Provide Your Info</h1>
-              <p className="note">Please provide an email so your key can go to your email and Roblox Username if paying with robux</p>
-              <input 
-                type="email" 
-                className="input" 
-                placeholder="Enter your email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-              />
-              <input 
-                type="text" 
-                className="input" 
-                placeholder="Enter your Roblox username" 
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
-              />
-              <button className="submit-btn" onClick={handleSubmit}>Submit</button>
-            </div>
-          );
-        }
-
-        const links = [
-          { name: "", price: "", href: "" },
-          { 
-            name: "Litecoin (LTC)", 
-            price: "$4.99", 
-            href: "litecoin:ltc1qcptesryl4a2d699zrymjnr3gwpgkc872pjljzj", 
-            copy: "ltc1qcptesryl4a2d699zrymjnr3gwpgkc872pjljzj" 
-          },
-          { 
-            name: "CashApp", 
-            price: "$10.00", 
-            href: "https://cash.app/$Jaydoem2" 
-          },
-          { name: "Robux", price: "1500 Robux", href: "https://www.roblox.com/game-pass/1085731859/Key" },
-        ];
-
-        const copyToClipboard = (text) => {
-          navigator.clipboard.writeText(text);
-          alert("Copied LTC address to clipboard!");
+        const copyLTC = () => {
+          navigator.clipboard.writeText(LTC_ADDRESS);
+          alert("LTC address copied!");
         };
 
         return (
           <div className="container">
-            <h1>PAYMENT CHOICES</h1>
-            {links.map((link) => (
-              <div key={link.name}>
-                <a 
-                  href={link.href} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="button"
-                  onClick={() => link.copy ? copyToClipboard(link.copy) : null}
-                >
-                  {link.name}
-                  <span>{link.price}</span>
-                  {link.copy && <div className="copy-text">Click to copy LTC address</div>}
-                </a>
-                {link.name === "Robux" && (
-                  <p className="note">When buying with robux please make sure you wear the shirt</p>
-                )}
+            <h1>Payments</h1>
+            <div className="subtitle">
+              $8 Monthly • $20 Lifetime
+            </div>
+
+            {/* Litecoin */}
+            <div className="card">
+              <div className="method">Litecoin (LTC)</div>
+              <div className="price">$8 Monthly • $20 Lifetime</div>
+              <button className="btn" onClick={copyLTC}>
+                Copy LTC Address
+              </button>
+              <div className="copy-text">{LTC_ADDRESS}</div>
+            </div>
+
+            {/* CashApp */}
+            <div className="card">
+              <div className="method">CashApp</div>
+              <div className="price">$8 Monthly • $20 Lifetime</div>
+              <a
+                href="https://cash.app/$Jaydoem2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn"
+              >
+                Pay with CashApp
+              </a>
+            </div>
+
+            {/* Robux */}
+            <div className="card">
+              <div className="method">Robux</div>
+              <div className="price">Lifetime Access</div>
+              <a
+                href="https://www.roblox.com/game-pass/1069872582/lua-key-201"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn"
+              >
+                Buy Robux Shirt
+              </a>
+              <div className="note">
+                Make sure you wear the shirt after purchase
               </div>
-            ))}
+            </div>
           </div>
         );
       }
