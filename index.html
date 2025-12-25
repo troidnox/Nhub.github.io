@@ -1,173 +1,454 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Payments</title>
+    <title>Xes Hub - Payments</title>
 
-    <!-- React -->
+    <!-- React & Babel -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-      body {
+      * {
         margin: 0;
-        background: radial-gradient(circle at top, #111 0%, #000 60%);
-        font-family: 'Inter', sans-serif;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a0f2e 50%, #0d0a15 100%);
+        font-family: 'Outfit', sans-serif;
+        color: #e8e8e8;
+        min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
-        color: white;
+        padding: 20px;
+        position: relative;
+        overflow-x: hidden;
       }
 
-      h1 {
-        font-size: 48px;
-        font-weight: 700;
-        margin-bottom: 10px;
+      /* Animated background elements */
+      body::before {
+        content: '';
+        position: fixed;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(200, 50, 50, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        top: -200px;
+        right: -200px;
+        z-index: 0;
+        animation: float 20s ease-in-out infinite;
       }
 
-      .subtitle {
-        font-size: 18px;
-        color: #aaa;
-        margin-bottom: 30px;
+      body::after {
+        content: '';
+        position: fixed;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(100, 100, 255, 0.08) 0%, transparent 70%);
+        border-radius: 50%;
+        bottom: -150px;
+        left: -150px;
+        z-index: 0;
+        animation: float 25s ease-in-out infinite reverse;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(30px); }
+      }
+
+      .root-wrapper {
+        position: relative;
+        z-index: 1;
+        width: 100%;
       }
 
       .container {
-        text-align: center;
-        max-width: 380px;
+        max-width: 1000px;
         width: 100%;
+        text-align: center;
+      }
+
+      .header {
+        margin-bottom: 60px;
+      }
+
+      .logo {
+        font-family: 'Outfit', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #c83232;
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+
+      h1 {
+        font-size: 56px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #fff 0%, #b8b8b8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 12px;
+        letter-spacing: -1px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+        color: #888;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+      }
+
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        margin-bottom: 40px;
       }
 
       .card {
-        background: #0b0b0b;
-        border: 1px solid #333;
-        border-radius: 18px;
-        padding: 22px;
-        margin-bottom: 18px;
-        transition: all 0.25s ease;
+        background: rgba(20, 15, 35, 0.6);
+        border: 1px solid rgba(200, 50, 50, 0.2);
+        border-radius: 16px;
+        padding: 32px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.35s cubic-bezier(0.23, 1, 0.320, 1);
+        backdrop-filter: blur(10px);
+      }
+
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(200, 50, 50, 0.3), transparent);
       }
 
       .card:hover {
-        border-color: #666;
-        transform: translateY(-4px);
+        border-color: rgba(200, 50, 50, 0.5);
+        background: rgba(30, 20, 45, 0.8);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(200, 50, 50, 0.15);
+      }
+
+      .card-header {
+        margin-bottom: 24px;
+      }
+
+      .method-icon {
+        font-size: 36px;
+        margin-bottom: 12px;
       }
 
       .method {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 700;
-        margin-bottom: 6px;
+        color: #fff;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
       }
 
-      .price {
-        font-size: 18px;
-        color: #bbb;
-        margin-bottom: 14px;
+      .price-tag {
+        font-size: 13px;
+        color: #888;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .price-divider {
+        color: #555;
+      }
+
+      .card-content {
+        margin-bottom: 20px;
+      }
+
+      .address-box {
+        background: rgba(10, 10, 10, 0.5);
+        border: 1px solid rgba(100, 100, 100, 0.2);
+        border-radius: 10px;
+        padding: 12px;
+        word-break: break-all;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: #aaa;
+        line-height: 1.5;
+        margin-top: 12px;
       }
 
       .btn {
-        display: block;
+        display: inline-block;
         width: 100%;
-        padding: 14px;
-        font-size: 18px;
+        padding: 14px 20px;
+        font-size: 15px;
         font-weight: 600;
         color: white;
-        background: #111;
-        border: 1px solid #444;
-        border-radius: 12px;
+        background: linear-gradient(135deg, #c83232 0%, #a82828 100%);
+        border: none;
+        border-radius: 10px;
         text-decoration: none;
         cursor: pointer;
-        transition: all 0.25s ease;
+        transition: all 0.3s ease;
+        font-family: 'Outfit', sans-serif;
+        letter-spacing: 0.3px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: left 0.3s ease;
+      }
+
+      .btn:hover::before {
+        left: 100%;
       }
 
       .btn:hover {
-        background: #1a1a1a;
-        border-color: #777;
+        background: linear-gradient(135deg, #e83232 0%, #c83232 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(200, 50, 50, 0.3);
       }
 
-      .copy-text {
-        font-size: 14px;
-        color: #888;
-        margin-top: 10px;
-        word-break: break-all;
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .btn-secondary {
+        background: rgba(100, 100, 100, 0.2);
+        border: 1px solid rgba(100, 100, 100, 0.4);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(100, 100, 100, 0.35);
+        box-shadow: 0 10px 30px rgba(100, 100, 100, 0.15);
       }
 
       .note {
+        font-size: 12px;
+        color: #666;
+        margin-top: 10px;
+        font-weight: 400;
+        letter-spacing: 0.2px;
+      }
+
+      .success-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(50, 180, 100, 0.9);
+        color: white;
+        padding: 14px 24px;
+        border-radius: 10px;
         font-size: 14px;
-        color: #777;
+        font-weight: 500;
+        backdrop-filter: blur(10px);
+        animation: slideIn 0.3s ease;
+        z-index: 1000;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .badge {
+        display: inline-block;
+        background: rgba(200, 50, 50, 0.2);
+        color: #ff6b6b;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
         margin-top: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 40px;
+        }
+
+        .pricing-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .subtitle {
+          font-size: 14px;
+        }
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.3);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgba(200, 50, 50, 0.4);
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(200, 50, 50, 0.6);
       }
     </style>
-  </head>
+</head>
 
-  <body>
-    <!-- Optional background music -->
-    <!--
-    <audio autoplay loop>
-      <source src="YOUR_AUDIO_LINK_HERE" type="audio/mpeg">
-    </audio>
-    -->
-
+<body>
     <div id="root"></div>
 
     <script type="text/babel">
       function App() {
+        const [showSuccess, setShowSuccess] = React.useState(false);
+        const [successText, setSuccessText] = React.useState("");
+
         const LTC_ADDRESS = "ltc1qdarlmf327ypv4krq3nrl3prpfehmkz7tzsnxvp";
 
-        const copyLTC = () => {
-          navigator.clipboard.writeText(LTC_ADDRESS);
-          alert("LTC address copied!");
+        const copyToClipboard = (text, message) => {
+          navigator.clipboard.writeText(text).then(() => {
+            setSuccessText(message);
+            setShowSuccess(true);
+            setTimeout(() => setShowSuccess(false), 3000);
+          });
         };
 
         return (
-          <div className="container">
-            <h1>Payments</h1>
-            <div className="subtitle">
-              $8 Monthly • $20 Lifetime
-            </div>
+          <div className="root-wrapper">
+            {showSuccess && <div className="success-message">✓ {successText}</div>}
+            
+            <div className="container">
+              <div className="header">
+                <div className="logo">Xes Hub</div>
+                <h1>Unlock Premium</h1>
+                <p className="subtitle">Get access to exclusive features and advanced tools</p>
+              </div>
 
-            {/* Litecoin */}
-            <div className="card">
-              <div className="method">Litecoin (LTC)</div>
-              <div className="price">$8 Monthly • $20 Lifetime</div>
-              <button className="btn" onClick={copyLTC}>
-                Copy LTC Address
-              </button>
-              <div className="copy-text">{LTC_ADDRESS}</div>
-            </div>
+              <div className="pricing-grid">
+                {/* Litecoin */}
+                <div className="card">
+                  <div className="card-header">
+                    <div className="method-icon">₿</div>
+                    <div className="method">Litecoin</div>
+                    <div className="price-tag">
+                      <span>$7<span className="price-divider">/</span>mo</span>
+                      <span>$15<span className="price-divider">/</span>lifetime</span>
+                    </div>
+                  </div>
+                  <div className="card-content">
+                    <button 
+                      className="btn" 
+                      onClick={() => copyToClipboard(LTC_ADDRESS, "LTC address copied!")}
+                    >
+                      Copy LTC Address
+                    </button>
+                    <div className="address-box">{LTC_ADDRESS}</div>
+                  </div>
+                </div>
 
-            {/* CashApp */}
-            <div className="card">
-              <div className="method">CashApp</div>
-              <div className="price">$8 Monthly • $20 Lifetime</div>
-              <a
-                href="https://cash.app/$Jaydoem2"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn"
-              >
-                Pay with CashApp
-              </a>
-            </div>
+                {/* CashApp */}
+                <div className="card">
+                  <div className="card-header">
+                    <div className="method-icon">💵</div>
+                    <div className="method">CashApp</div>
+                    <div className="price-tag">
+                      <span>$7<span className="price-divider">/</span>mo</span>
+                      <span>$15<span className="price-divider">/</span>lifetime</span>
+                    </div>
+                  </div>
+                  <div className="card-content">
+                    <a
+                      href="https://cash.app/$Jaydoem2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn"
+                    >
+                      Pay with CashApp
+                    </a>
+                    <div className="note">Fast & Secure Payment</div>
+                  </div>
+                </div>
 
-            {/* Robux */}
-            <div className="card">
-              <div className="method">Robux</div>
-              <div className="price">Lifetime Access</div>
-              <a
-                href="https://www.roblox.com/game-pass/1069872582/lua-key-201"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn"
-              >
-                Buy Robux Shirt
-              </a>
-              <div className="note">
-                Make sure you wear the shirt after purchase
+                {/* Robux Monthly */}
+                <div className="card">
+                  <div className="card-header">
+                    <div className="method-icon">🎮</div>
+                    <div className="method">Robux</div>
+                    <div className="price-tag">
+                      <span>1900 Robux<span className="price-divider">/</span>mo</span>
+                    </div>
+                    <div className="badge">Monthly</div>
+                  </div>
+                  <div className="card-content">
+                    <a
+                      href="https://www.roblox.com/game-pass/1085731859/Key"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn"
+                    >
+                      Buy Game Pass
+                    </a>
+                    <div className="note">Wear the pass after purchase</div>
+                  </div>
+                </div>
+
+                {/* Robux Lifetime */}
+                <div className="card">
+                  <div className="card-header">
+                    <div className="method-icon">👑</div>
+                    <div className="method">Robux Pro</div>
+                    <div className="price-tag">
+                      <span>$15<span className="price-divider">/</span>lifetime</span>
+                    </div>
+                    <div className="badge">Lifetime</div>
+                  </div>
+                  <div className="card-content">
+                    <a
+                      href="https://www.roblox.com/game-pass/1069872582/lua-key-201"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn"
+                    >
+                      Buy Lifetime Pass
+                    </a>
+                    <div className="note">One-time purchase, forever access</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -176,5 +457,5 @@
 
       ReactDOM.createRoot(document.getElementById("root")).render(<App />);
     </script>
-  </body>
+</body>
 </html>
