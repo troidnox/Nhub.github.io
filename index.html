@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xes Hub - Payments</title>
+    <title>Xes Hub - Get Premium</title>
 
-    <!-- React & Babel -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
       * {
@@ -20,312 +18,345 @@
         box-sizing: border-box;
       }
 
+      :root {
+        --bg: #fafafa;
+        --surface: #ffffff;
+        --border: #e8e8e8;
+        --text-primary: #0a0a0a;
+        --text-secondary: #666666;
+        --text-tertiary: #999999;
+        --accent: #ff3b30;
+        --accent-hover: #e6352b;
+        --success: #34c759;
+        --mono: 'Space Mono', monospace;
+        --sans: 'DM Sans', -apple-system, sans-serif;
+      }
+
       body {
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a0f2e 50%, #0d0a15 100%);
-        font-family: 'Outfit', sans-serif;
-        color: #e8e8e8;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        position: relative;
-        overflow-x: hidden;
-      }
-
-      /* Animated background elements */
-      body::before {
-        content: '';
-        position: fixed;
-        width: 600px;
-        height: 600px;
-        background: radial-gradient(circle, rgba(200, 50, 50, 0.1) 0%, transparent 70%);
-        border-radius: 50%;
-        top: -200px;
-        right: -200px;
-        z-index: 0;
-        animation: float 20s ease-in-out infinite;
-      }
-
-      body::after {
-        content: '';
-        position: fixed;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(100, 100, 255, 0.08) 0%, transparent 70%);
-        border-radius: 50%;
-        bottom: -150px;
-        left: -150px;
-        z-index: 0;
-        animation: float 25s ease-in-out infinite reverse;
-      }
-
-      @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(30px); }
-      }
-
-      .root-wrapper {
-        position: relative;
-        z-index: 1;
-        width: 100%;
+        background: var(--bg);
+        font-family: var(--sans);
+        color: var(--text-primary);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
       }
 
       .container {
-        max-width: 1000px;
-        width: 100%;
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 80px 24px 120px;
+      }
+
+      header {
         text-align: center;
+        margin-bottom: 56px;
       }
 
-      .header {
-        margin-bottom: 60px;
-      }
-
-      .logo {
-        font-family: 'Outfit', sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-        letter-spacing: 3px;
+      .brand {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 13px;
+        font-weight: 700;
         text-transform: uppercase;
-        color: #c83232;
-        margin-bottom: 20px;
-        opacity: 0.9;
+        letter-spacing: 0.1em;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        padding: 6px 12px;
+        border: 1.5px solid var(--text-primary);
       }
 
       h1 {
-        font-size: 56px;
-        font-weight: 800;
-        background: linear-gradient(135deg, #fff 0%, #b8b8b8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        font-size: 48px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
         margin-bottom: 12px;
-        letter-spacing: -1px;
+        line-height: 1.1;
       }
 
-      .subtitle {
-        font-size: 16px;
-        color: #888;
+      .tagline {
+        font-size: 18px;
+        color: var(--text-secondary);
         font-weight: 400;
-        letter-spacing: 0.5px;
       }
 
-      .pricing-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 24px;
-        margin-bottom: 40px;
-      }
-
-      .card {
-        background: rgba(20, 15, 35, 0.6);
-        border: 1px solid rgba(200, 50, 50, 0.2);
-        border-radius: 16px;
-        padding: 32px;
-        position: relative;
+      .plans {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
         overflow: hidden;
-        transition: all 0.35s cubic-bezier(0.23, 1, 0.320, 1);
-        backdrop-filter: blur(10px);
-      }
-
-      .card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(200, 50, 50, 0.3), transparent);
-      }
-
-      .card:hover {
-        border-color: rgba(200, 50, 50, 0.5);
-        background: rgba(30, 20, 45, 0.8);
-        transform: translateY(-8px);
-        box-shadow: 0 20px 60px rgba(200, 50, 50, 0.15);
-      }
-
-      .card-header {
         margin-bottom: 24px;
       }
 
-      .method-icon {
+      .plan-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .plan-type {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+      }
+
+      .plan-pricing {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 6px;
+      }
+
+      .price {
         font-size: 36px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .period {
+        font-size: 16px;
+        color: var(--text-secondary);
+      }
+
+      .plan-description {
+        font-size: 15px;
+        color: var(--text-tertiary);
+      }
+
+      .payment-methods {
+        padding: 28px;
+      }
+
+      .method-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .method-button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 16px 20px;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        font-family: var(--sans);
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        text-align: left;
+      }
+
+      .method-button:hover {
+        border-color: var(--text-primary);
+        background: var(--bg);
+      }
+
+      .method-button:active {
+        transform: scale(0.99);
+      }
+
+      .method-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .method-icon {
+        font-size: 22px;
+        line-height: 1;
+      }
+
+      .arrow {
+        color: var(--text-tertiary);
+        font-size: 18px;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 20px 0;
+        color: var(--text-tertiary);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .crypto-section {
+        background: var(--bg);
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        padding: 20px;
+      }
+
+      .crypto-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
         margin-bottom: 12px;
       }
 
-      .method {
-        font-size: 22px;
-        font-weight: 700;
-        color: #fff;
-        margin-bottom: 8px;
-        letter-spacing: -0.5px;
-      }
-
-      .price-tag {
-        font-size: 13px;
-        color: #888;
-        font-weight: 500;
-        letter-spacing: 0.3px;
-        text-transform: uppercase;
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .price-divider {
-        color: #555;
-      }
-
-      .card-content {
-        margin-bottom: 20px;
-      }
-
-      .address-box {
-        background: rgba(10, 10, 10, 0.5);
-        border: 1px solid rgba(100, 100, 100, 0.2);
-        border-radius: 10px;
-        padding: 12px;
-        word-break: break-all;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 12px;
-        color: #aaa;
-        line-height: 1.5;
-        margin-top: 12px;
-      }
-
-      .btn {
-        display: inline-block;
-        width: 100%;
-        padding: 14px 20px;
+      .crypto-label {
         font-size: 15px;
         font-weight: 600;
-        color: white;
-        background: linear-gradient(135deg, #c83232 0%, #a82828 100%);
-        border: none;
-        border-radius: 10px;
-        text-decoration: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: 'Outfit', sans-serif;
-        letter-spacing: 0.3px;
+      }
+
+      .address-container {
         position: relative;
-        overflow: hidden;
       }
 
-      .btn::before {
-        content: '';
+      .address {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--text-secondary);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 12px 80px 12px 12px;
+        word-break: break-all;
+        line-height: 1.5;
+      }
+
+      .copy-btn {
         position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.2);
-        transition: left 0.3s ease;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        background: var(--text-primary);
+        color: var(--surface);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        font-family: var(--sans);
       }
 
-      .btn:hover::before {
-        left: 100%;
+      .copy-btn:hover {
+        background: var(--text-secondary);
       }
 
-      .btn:hover {
-        background: linear-gradient(135deg, #e83232 0%, #c83232 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(200, 50, 50, 0.3);
-      }
-
-      .btn:active {
-        transform: translateY(0);
-      }
-
-      .btn-secondary {
-        background: rgba(100, 100, 100, 0.2);
-        border: 1px solid rgba(100, 100, 100, 0.4);
-      }
-
-      .btn-secondary:hover {
-        background: rgba(100, 100, 100, 0.35);
-        box-shadow: 0 10px 30px rgba(100, 100, 100, 0.15);
+      .copy-btn:active {
+        transform: translateY(-50%) scale(0.95);
       }
 
       .note {
-        font-size: 12px;
-        color: #666;
-        margin-top: 10px;
-        font-weight: 400;
-        letter-spacing: 0.2px;
+        font-size: 13px;
+        color: var(--text-tertiary);
+        margin-top: 12px;
+        line-height: 1.5;
       }
 
-      .success-message {
+      .toast {
         position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(50, 180, 100, 0.9);
-        color: white;
-        padding: 14px 24px;
-        border-radius: 10px;
+        bottom: 24px;
+        right: 24px;
+        background: var(--text-primary);
+        color: var(--surface);
+        padding: 12px 20px;
+        border-radius: 8px;
         font-size: 14px;
         font-weight: 500;
-        backdrop-filter: blur(10px);
-        animation: slideIn 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: slideUp 0.2s ease;
         z-index: 1000;
       }
 
-      @keyframes slideIn {
+      @keyframes slideUp {
         from {
-          transform: translateX(400px);
+          transform: translateY(100px);
           opacity: 0;
         }
         to {
-          transform: translateX(0);
+          transform: translateY(0);
           opacity: 1;
         }
       }
 
-      .badge {
-        display: inline-block;
-        background: rgba(200, 50, 50, 0.2);
-        color: #ff6b6b;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 11px;
+      .features {
+        margin-top: 48px;
+        padding-top: 48px;
+        border-top: 1px solid var(--border);
+      }
+
+      .features-title {
+        font-size: 14px;
         font-weight: 600;
-        margin-top: 8px;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
+        margin-bottom: 20px;
       }
 
-      @media (max-width: 768px) {
+      .feature-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 15px;
+        color: var(--text-secondary);
+      }
+
+      .check {
+        color: var(--success);
+        font-size: 18px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 60px 20px 80px;
+        }
+
         h1 {
-          font-size: 40px;
+          font-size: 36px;
         }
 
-        .pricing-grid {
-          grid-template-columns: 1fr;
+        .tagline {
+          font-size: 16px;
         }
 
-        .subtitle {
-          font-size: 14px;
+        .price {
+          font-size: 32px;
         }
-      }
 
-      /* Scrollbar styling */
-      ::-webkit-scrollbar {
-        width: 10px;
-      }
+        .payment-methods {
+          padding: 20px;
+        }
 
-      ::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.3);
-      }
+        .address {
+          padding-right: 12px;
+        }
 
-      ::-webkit-scrollbar-thumb {
-        background: rgba(200, 50, 50, 0.4);
-        border-radius: 5px;
-      }
+        .copy-btn {
+          position: static;
+          transform: none;
+          width: 100%;
+          margin-top: 8px;
+        }
 
-      ::-webkit-scrollbar-thumb:hover {
-        background: rgba(200, 50, 50, 0.6);
+        .copy-btn:active {
+          transform: scale(0.98);
+        }
       }
     </style>
 </head>
@@ -335,100 +366,159 @@
 
     <script type="text/babel">
       function App() {
-        const [showSuccess, setShowSuccess] = React.useState(false);
-        const [successText, setSuccessText] = React.useState("");
+        const [showToast, setShowToast] = React.useState(false);
+        const [toastMessage, setToastMessage] = React.useState("");
 
         const LTC_ADDRESS = "ltc1qdarlmf327ypv4krq3nrl3prpfehmkz7tzsnxvp";
 
-        const copyToClipboard = (text, message) => {
-          navigator.clipboard.writeText(text).then(() => {
-            setSuccessText(message);
-            setShowSuccess(true);
-            setTimeout(() => setShowSuccess(false), 3000);
+        const copyAddress = () => {
+          navigator.clipboard.writeText(LTC_ADDRESS).then(() => {
+            setToastMessage("Address copied to clipboard");
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 2500);
           });
         };
 
+        const openLink = (url) => {
+          window.open(url, '_blank', 'noopener,noreferrer');
+        };
+
         return (
-          <div className="root-wrapper">
-            {showSuccess && <div className="success-message">✓ {successText}</div>}
+          <>
+            {showToast && <div className="toast">{toastMessage}</div>}
             
             <div className="container">
-              <div className="header">
-                <div className="logo">Xes Hub</div>
-                <h1>Unlock Premium</h1>
-                <p className="subtitle">Get access to exclusive features and advanced tools</p>
+              <header>
+                <div className="brand">Xes Hub</div>
+                <h1>Get Premium</h1>
+                <p className="tagline">Choose your plan and payment method</p>
+              </header>
+
+              <div className="plans">
+                <div className="plan-header">
+                  <div className="plan-type">Monthly</div>
+                  <div className="plan-pricing">
+                    <span className="price">$7</span>
+                    <span className="period">per month</span>
+                  </div>
+                  <p className="plan-description">Billed monthly • Cancel anytime</p>
+                </div>
+                
+                <div className="payment-methods">
+                  <div className="method-grid">
+                    <button 
+                      className="method-button"
+                      onClick={() => openLink('https://cash.app/$Jaydoem2')}
+                    >
+                      <div className="method-info">
+                        <span className="method-icon">💵</span>
+                        <span>Pay with Cash App</span>
+                      </div>
+                      <span className="arrow">→</span>
+                    </button>
+
+                    <button 
+                      className="method-button"
+                      onClick={() => openLink('https://www.roblox.com/game-pass/1085731859/Key')}
+                    >
+                      <div className="method-info">
+                        <span className="method-icon">🎮</span>
+                        <span>Pay with Robux</span>
+                      </div>
+                      <span className="arrow">→</span>
+                    </button>
+                  </div>
+
+                  <div className="divider">or</div>
+
+                  <div className="crypto-section">
+                    <div className="crypto-header">
+                      <span className="method-icon">₿</span>
+                      <span className="crypto-label">Litecoin (LTC)</span>
+                    </div>
+                    <div className="address-container">
+                      <div className="address">{LTC_ADDRESS}</div>
+                      <button className="copy-btn" onClick={copyAddress}>Copy</button>
+                    </div>
+                    <p className="note">Send $7 worth of LTC to this address</p>
+                  </div>
+                </div>
               </div>
 
-              <div className="pricing-grid">
-                {/* Litecoin */}
-                <div className="card">
-                  <div className="card-header">
-                    <div className="method-icon">₿</div>
-                    <div className="method">Litecoin</div>
-                    <div className="price-tag">
-                      <span>$7<span className="price-divider">/</span>mo</span>
-                      <span>$15<span className="price-divider">/</span>lifetime</span>
-                    </div>
+              <div className="plans">
+                <div className="plan-header">
+                  <div className="plan-type">Lifetime</div>
+                  <div className="plan-pricing">
+                    <span className="price">$15</span>
+                    <span className="period">one-time</span>
                   </div>
-                  <div className="card-content">
+                  <p className="plan-description">Pay once • Keep forever</p>
+                </div>
+                
+                <div className="payment-methods">
+                  <div className="method-grid">
                     <button 
-                      className="btn" 
-                      onClick={() => copyToClipboard(LTC_ADDRESS, "LTC address copied!")}
+                      className="method-button"
+                      onClick={() => openLink('https://cash.app/$Jaydoem2')}
                     >
-                      Copy LTC Address
+                      <div className="method-info">
+                        <span className="method-icon">💵</span>
+                        <span>Pay with Cash App</span>
+                      </div>
+                      <span className="arrow">→</span>
                     </button>
-                    <div className="address-box">{LTC_ADDRESS}</div>
+
+                    <button 
+                      className="method-button"
+                      onClick={() => openLink('https://www.roblox.com/game-pass/1009031286/lua-key-306')}
+                    >
+                      <div className="method-info">
+                        <span className="method-icon">🎮</span>
+                        <span>Pay with Robux</span>
+                      </div>
+                      <span className="arrow">→</span>
+                    </button>
+                  </div>
+
+                  <div className="divider">or</div>
+
+                  <div className="crypto-section">
+                    <div className="crypto-header">
+                      <span className="method-icon">₿</span>
+                      <span className="crypto-label">Litecoin (LTC)</span>
+                    </div>
+                    <div className="address-container">
+                      <div className="address">{LTC_ADDRESS}</div>
+                      <button className="copy-btn" onClick={copyAddress}>Copy</button>
+                    </div>
+                    <p className="note">Send $15 worth of LTC to this address</p>
                   </div>
                 </div>
+              </div>
 
-                {/* CashApp */}
-                <div className="card">
-                  <div className="card-header">
-                    <div className="method-icon">💵</div>
-                    <div className="method">CashApp</div>
-                    <div className="price-tag">
-                      <span>$7<span className="price-divider">/</span>mo</span>
-                      <span>$15<span className="price-divider">/</span>lifetime</span>
-                    </div>
+              <div className="features">
+                <div className="features-title">What's Included</div>
+                <div className="feature-list">
+                  <div className="feature-item">
+                    <span className="check">✓</span>
+                    <span>Access to all premium features and tools</span>
                   </div>
-                  <div className="card-content">
-                    <a
-                      href="https://cash.app/$Jaydoem2"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn"
-                    >
-                      Pay with CashApp
-                    </a>
-                    <div className="note">Fast & Secure Payment</div>
+                  <div className="feature-item">
+                    <span className="check">✓</span>
+                    <span>Priority support and updates</span>
                   </div>
-                </div>
-
-                {/* Robux */}
-                <div className="card">
-                  <div className="card-header">
-                    <div className="method-icon">🎮</div>
-                    <div className="method">Robux</div>
-                    <div className="price-tag">
-                      <span>$7<span className="price-divider">/</span>mo</span>
-                      <span>$15<span className="price-divider">/</span>lifetime</span>
-                    </div>
+                  <div className="feature-item">
+                    <span className="check">✓</span>
+                    <span>No ads or limitations</span>
                   </div>
-                  <div className="card-content">
-                    <a
-                      href="https://www.roblox.com/game-pass/1085731859/Key"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn"
-                    >
-                      Buy Game Pass
-                    </a>
-                    <div className="note">Wear the pass after purchase</div>
+                  <div className="feature-item">
+                    <span className="check">✓</span>
+                    <span>Early access to new releases</span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </>
         );
       }
 
